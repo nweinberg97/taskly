@@ -18,6 +18,7 @@ header {
 /* Main Section Styles */
 main {
     display: flex;
+    flex-direction: row;
     justify-content: space-between; /* Evenly distribute space between columns */
     padding: 20px;
     overflow-x: auto; /* Enable horizontal scrolling if necessary */

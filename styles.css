@@ -1,52 +1,25 @@
 /* General Styles */
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
+    font-family: Arial, sans-serif;
 }
 
-/* Header Styles */
-header {
-    background-color: #333;
-    color: white;
-    padding: 15px;
-    text-align: center;
-}
-
-/* Main Section Styles */
-main {
+/* Container for Columns */
+.columns-container {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between; /* Evenly distribute space between columns */
     padding: 20px;
-    overflow-x: auto; /* Enable horizontal scrolling if necessary */
+    gap: 10px; /* Space between columns */
+    overflow-x: auto; /* Horizontal scrolling if necessary */
 }
 
-/* Column Styles */
+/* Each Column */
 .column {
-    background-color: #fff;
+    background-color: #eee;
+    padding: 20px;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 15px;
-    width: 18%;
-    min-width: 200px; /* Minimum width for responsiveness */
-    box-sizing: border-box; /* Include padding in width calculation */
-}
-
-.column h2 {
+    flex: 1; /* Equal width for each column */
+    min-width: 150px; /* Minimum width for columns */
     text-align: center;
-    color: #555;
-    margin: 0;
-    padding-bottom: 10px;
 }
-
-/* Task List Styles */
-.task-list {
-    min-height: 150px;
-    border-top: 1px solid #ddd;
-    margin-top: 10px;
-    padding-top: 10px;
-}
-

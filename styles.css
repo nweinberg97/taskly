@@ -31,9 +31,8 @@ main {
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     padding: 15px;
-    width: 18%;
-    min-width: 250px; /* Minimum width for responsiveness */
-    margin-right: 20px;
+    width: 250px; /* Fixed width for columns */
+    margin-right: 20px; /* Space between columns */
     color: white; /* White text color */
     display: flex;
     flex-direction: column;

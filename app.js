@@ -3,11 +3,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function createTaskCard(taskText, columnId) {
         const taskCard = document.createElement("div");
-        taskCard.className = "task-card";
+        taskCard.className = "task-card"; // Ensure the correct class name
         taskCard.textContent = taskText;
         taskCard.setAttribute("draggable", "true");
-        
-        // Add drag event listeners
+
+        // Drag and drop event listeners
         taskCard.addEventListener('dragstart', (e) => {
             draggedCard = taskCard;
             e.dataTransfer.effectAllowed = 'move';
@@ -20,23 +20,18 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById(columnId).querySelector('.task-list').appendChild(taskCard);
     }
 
-    // Setup input fields and buttons for task creation
+    // Event listener for creating new tasks
     document.querySelectorAll('.column').forEach(column => {
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.placeholder = 'Add a task...';
-        const button = document.createElement('button');
-        button.textContent = 'Add Task';
-        
+        const input = column.querySelector('input[type="text"]');
+        const button = column.querySelector('button');
+
         button.addEventListener('click', () => {
-            if (input.value.trim()) {
-                createTaskCard(input.value.trim(), column.id);
-                input.value = ''; // Clear the input field
+            const taskText = input.value.trim();
+            if (taskText) {
+                createTaskCard(taskText, column.id);
+                input.value = ''; // Clear the input field after adding
             }
         });
-        
-        column.prepend(input);
-        column.prepend(button);
     });
 
     // Handle drag over and drop for columns

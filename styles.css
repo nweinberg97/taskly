@@ -21,7 +21,7 @@ main {
     display: flex;
     justify-content: space-around;
     padding: 20px;
-    flex-wrap: wrap; /* To handle smaller screens */
+    flex-wrap: nowrap; /* Prevent columns from wrapping to the next line */
 }
 
 /* Column Styles */
@@ -33,6 +33,8 @@ main {
     width: 18%;
     min-width: 200px; /* Minimum width for responsiveness */
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .column h2 {
@@ -53,18 +55,19 @@ main {
 /* Task Card Styles */
 .task-card {
     background-color: #fff;
-    border: 1px solid #ddd;
+    border: 1px solid blue; /* Blue border for task cards */
     border-radius: 3px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     margin-bottom: 10px;
     padding: 10px;
     cursor: pointer;
     transition: background-color 0.3s, box-shadow 0.3s;
+    font-size: 14px;
 }
 
 .task-card:hover {
     background-color: #f0f0f0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Larger shadow on hover */
 }
 
 /* Trash Bin Styles */
@@ -74,12 +77,13 @@ main {
     right: 20px;
     background-color: #e74c3c;
     color: white;
-    padding: 10px;
+    padding: 20px; /* Increased padding for a larger size */
     border-radius: 50%;
     text-align: center;
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     transition: background-color 0.3s;
+    font-size: 24px; /* Adjust font size for the emoji or text */
 }
 
 .trash-bin:hover {

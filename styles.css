@@ -88,28 +88,20 @@ main {
     cursor: pointer;
     font-size: 18px;
     box-sizing: border-box;
-    margin-left: 5px; /* Left-align with a small margin */
-}
-
-.add-task-button:hover {
-    background-color: #0056b3;
+    margin-right: 10px; /* Margin to the right of the input field */
+    float: left; /* Align button to the left */
 }
 
 /* Task Input Area */
 .task-input {
-    width: 100%;
+    width: calc(100% - 60px); /* Adjusted to fit with button */
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-top: 10px;
     box-sizing: border-box;
     font-size: 14px;
-    display: none; /* Hidden by default, shown when adding a task */
-}
-
-/* Task Input Area for Active Entry */
-.task-input-active {
-    display: block;
+    float: left; /* Float left to align with the button */
 }
 
 /* Trash Bin Styling */

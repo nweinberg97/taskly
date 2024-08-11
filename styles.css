@@ -1,1 +1,115 @@
+/* Basic Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff; /* White background */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+}
+
+/* Header Styles */
+header {
+    width: 100%;
+    background-color: #333;
+    color: white;
+    padding: 15px 0;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Main Section Layout */
+main {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+    max-width: 1200px; /* Limit the max-width to keep it centered on large screens */
+    box-sizing: border-box;
+}
+
+/* Category Container Styling */
+.column {
+    background-color: #ffffff; /* White background */
+    border: 1px solid #000000; /* Black border */
+    border-radius: 5px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Light shadow */
+    padding: 15px;
+    flex: 1;
+    min-width: 200px;
+    max-width: 220px; /* Set a maximum width */
+    box-sizing: border-box;
+}
+
+.column h2 {
+    font-size: 18px;
+    margin: 0 0 10px 0;
+    text-align: center;
+    color: #333;
+}
+
+/* Task List Styling */
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Task Card Styling */
+.task-card {
+    background-color: #ffffff; /* White background */
+    border-radius: 3px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Shadow for a professional look */
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    transition: box-shadow 0.3s;
+}
+
+.task-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Increase shadow on hover */
+}
+
+/* Add Task Button */
+.add-task-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.add-task-button:hover {
+    background-color: #218838;
+}
+
+/* Trash Bin Styling */
+.trash-bin {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #e74c3c;
+    color: white;
+    padding: 20px;
+    border-radius: 50%;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, background-color 0.3s;
+    font-size: 30px; /* Larger size for the trash icon */
+}
+
+.trash-bin:hover {
+    transform: scale(1.2); /* Grow in size when hovered */
+    background-color: #c0392b; /* Slightly darker red on hover */
+}
 

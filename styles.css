@@ -37,7 +37,7 @@ main {
     background-color: #ffffff; /* White background */
     border: 1px solid #000000; /* Black border */
     border-radius: 5px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Light shadow */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow for more depth */
     padding: 15px;
     flex: 1;
     min-width: 200px;
@@ -75,21 +75,41 @@ main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Increase shadow on hover */
 }
 
-/* Add Task Button */
+/* Add Task Button Styling */
 .add-task-button {
-    background-color: #28a745;
+    background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 3px;
-    padding: 10px;
+    border-radius: 8px; /* Slightly rounded edges */
+    padding: 8px 12px; /* Adjusted padding */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    font-size: 14px;
-    width: 100%;
+    font-size: 18px;
     box-sizing: border-box;
+    margin-left: 5px; /* Left-align with a small margin */
 }
 
 .add-task-button:hover {
-    background-color: #218838;
+    background-color: #0056b3;
+}
+
+/* Task Input Area */
+.task-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+    box-sizing: border-box;
+    font-size: 14px;
+    display: none; /* Hidden by default, shown when adding a task */
+}
+
+/* Task Input Area for Active Entry */
+.task-input-active {
+    display: block;
 }
 
 /* Trash Bin Styling */
@@ -97,19 +117,12 @@ main {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background-color: #e74c3c;
-    color: white;
-    padding: 20px;
-    border-radius: 50%;
-    text-align: center;
     cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s, background-color 0.3s;
-    font-size: 30px; /* Larger size for the trash icon */
+    transition: transform 0.3s;
+    font-size: 40px; /* Larger size for the trash icon */
+    color: #e74c3c; /* Red color */
 }
 
 .trash-bin:hover {
     transform: scale(1.2); /* Grow in size when hovered */
-    background-color: #c0392b; /* Slightly darker red on hover */
 }
-

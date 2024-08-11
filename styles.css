@@ -43,8 +43,11 @@ main {
     min-width: 200px;
     max-width: 220px; /* Set a maximum width */
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
 
+/* Header in Each Category */
 .column h2 {
     font-size: 18px;
     margin: 0 0 10px 0;
@@ -52,11 +55,52 @@ main {
     color: #333;
 }
 
+/* Container for Button and Input */
+.column .input-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Align items to the left */
+    margin-top: 10px; /* Spacing between input and top elements */
+}
+
+/* Add Task Button Styling */
+.add-task-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px; /* Slightly rounded edges */
+    padding: 8px 12px; /* Adjusted padding */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    box-sizing: border-box;
+    margin-right: 10px; /* Space between button and input */
+    flex-shrink: 0; /* Prevent the button from shrinking */
+    transition: transform 0.2s ease-in-out; /* Smooth transition effect */
+}
+
+.add-task-button:hover {
+    transform: scale(1.1); /* Slightly grow the button on hover */
+}
+
+/* Task Input Area */
+.task-input {
+    flex-grow: 1; /* Allow the input field to take up the remaining space */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
 /* Task List Styling */
 .task-list {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    margin-top: 20px; /* Spacing between task list and input area */
 }
 
 /* Task Card Styling */
@@ -73,35 +117,6 @@ main {
 
 .task-card:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Increase shadow on hover */
-}
-
-/* Add Task Button Styling */
-.add-task-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 8px; /* Slightly rounded edges */
-    padding: 8px 12px; /* Adjusted padding */
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 18px;
-    box-sizing: border-box;
-    margin-right: 10px; /* Margin to the right of the input field */
-    float: left; /* Align button to the left */
-}
-
-/* Task Input Area */
-.task-input {
-    width: calc(100% - 60px); /* Adjusted to fit with button */
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-top: 10px;
-    box-sizing: border-box;
-    font-size: 14px;
-    float: left; /* Float left to align with the button */
 }
 
 /* Trash Bin Styling */

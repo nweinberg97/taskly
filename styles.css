@@ -84,7 +84,7 @@ main {
 
 /* Task Input Area */
 .task-input {
-    width: 120px; /* Reduced width for the input field */
+    width: 150px; /* Reduced width for the input field */
     padding: 8px; /* Adjusted padding */
     border: 1px solid #ccc;
     border-radius: 5px;

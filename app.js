@@ -28,7 +28,7 @@ function createTaskCard(taskText) {
 
 // Function to handle adding tasks
 function addTask(event) {
-    const inputField = event.target.nextElementSibling;
+    const inputField = event.target.nextElementSibling || event.target;
     const taskText = inputField.value.trim();
 
     if (taskText !== '') {
@@ -40,9 +40,18 @@ function addTask(event) {
     }
 }
 
-// Event listeners for adding tasks
+// Event listeners for adding tasks via button click
 addTaskButtons.forEach(button => {
     button.addEventListener('click', addTask);
+});
+
+// Event listeners for adding tasks via Enter key
+taskInputFields.forEach(inputField => {
+    inputField.addEventListener('keydown', event => {
+        if (event.key === 'Enter') {
+            addTask(event);
+        }
+    });
 });
 
 // Drag and drop functionality
@@ -67,7 +76,7 @@ columns.forEach(column => {
         event.preventDefault();
         const afterElement = getDragAfterElement(column, event.clientY);
         if (afterElement == null) {
-            column.appendChild(draggedTask);
+            column.appendChild(draggedTask); // Append to the column if empty
         } else {
             column.insertBefore(draggedTask, afterElement);
         }
@@ -135,4 +144,3 @@ function loadTasks() {
         });
     }
 }
-

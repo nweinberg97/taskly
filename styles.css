@@ -1,7 +1,7 @@
 /* Basic Styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #ffffff;
+    background-color: #ffffff; /* White background */
     margin: 0;
     padding: 0;
     display: flex;
@@ -24,39 +24,44 @@ header {
 /* Main Section Layout */
 main {
     display: flex;
-    justify-content: center; /* Center the columns */
-    gap: 10px; /* Adjusted gap for better spacing */
+    justify-content: space-between;
+    gap: 20px;
     padding: 20px;
     width: 100%;
-    max-width: 1200px; /* Limit the max-width to keep it centered on large screens */
+    max-width: 1400px; /* Increased max-width to accommodate wider columns */
     box-sizing: border-box;
-    flex-wrap: wrap; /* Ensure columns wrap if the screen size is too small */
 }
 
-/* Column Styling */
+/* Category Container Styling */
 .column {
-    background-color: #ffffff;
-    border: 1px solid #000000;
+    background-color: #ffffff; /* White background */
+    border: 1px solid #000000; /* Black border */
     border-radius: 5px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow for more depth */
     padding: 15px;
     flex: 1;
-    min-width: 180px; /* Narrower minimum width */
-    max-width: 200px; /* Narrower maximum width */
+    min-width: 240px; /* Slightly increased min-width */
+    max-width: 260px; /* Slightly increased max-width */
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    min-height: 150px;
-    transition: min-height 0.2s ease-in-out;
 }
 
-/* Input Container */
+/* Header in Each Category */
+.column h2 {
+    font-size: 18px;
+    margin: 0 0 10px 0;
+    text-align: center;
+    color: #333;
+}
+
+/* Container for Button and Input */
 .column .input-container {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    gap: 8px; /* Reduced gap between button and input */
-    margin-top: 10px;
+    justify-content: flex-start; /* Align items to the left */
+    gap: 8px; /* Gap between the button and input field */
+    margin-top: 10px; /* Spacing between input and top elements */
 }
 
 /* Add Task Button Styling */
@@ -64,44 +69,45 @@ main {
     background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 8px; /* Slightly rounded edges */
     padding: 8px 10px; /* Adjusted padding */
     cursor: pointer;
-    font-size: 16px; /* Consistent font size */
+    font-size: 18px;
     box-sizing: border-box;
-    flex-shrink: 0;
-    transition: transform 0.2s ease-in-out;
+    flex-shrink: 0; /* Prevent the button from shrinking */
+    transition: transform 0.2s ease-in-out; /* Smooth transition effect */
 }
 
 .add-task-button:hover {
-    transform: scale(1.1);
+    transform: scale(1.1); /* Slightly grow the button on hover */
 }
 
 /* Task Input Area */
 .task-input {
-    width: 100px; /* Narrower input field width */
-    padding: 6px;
+    width: 120px; /* Reduced width for the input field */
+    padding: 8px; /* Adjusted padding */
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
     font-size: 14px;
-    min-width: 0;
+    min-width: 0; /* Prevents input from shrinking too much */
 }
+
 
 /* Task List Styling */
 .task-list {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-top: 20px;
+    margin-top: 20px; /* Spacing between task list and input area */
 }
 
 /* Task Card Styling */
 .task-card {
-    background-color: #ffffff;
+    background-color: #ffffff; /* White background */
     border-radius: 3px;
     padding: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Shadow for a professional look */
     font-size: 14px;
     color: #333;
     cursor: pointer;
@@ -109,7 +115,7 @@ main {
 }
 
 .task-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Increase shadow on hover */
 }
 
 /* Trash Bin Styling */
@@ -119,10 +125,10 @@ main {
     right: 20px;
     cursor: pointer;
     transition: transform 0.3s;
-    font-size: 40px;
-    color: #e74c3c;
+    font-size: 40px; /* Larger size for the trash icon */
+    color: #e74c3c; /* Red color */
 }
 
 .trash-bin:hover {
-    transform: scale(1.2);
+    transform: scale(1.2); /* Grow in size when hovered */
 }

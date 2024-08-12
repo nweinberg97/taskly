@@ -1,7 +1,7 @@
 /* Basic Styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #ffffff; /* White background */
+    background-color: #ffffff;
     margin: 0;
     padding: 0;
     display: flex;
@@ -24,19 +24,20 @@ header {
 /* Main Section Layout */
 main {
     display: flex;
-    justify-content: center; /* Center columns instead of spacing them out */
+    justify-content: center; /* Center the columns */
     gap: 20px;
     padding: 20px;
     width: 100%;
-    max-width: 1200px; /* Limit the max-width to keep it centered on large screens */
+    max-width: 1200px;
     box-sizing: border-box;
+    flex-wrap: wrap; /* Ensure columns wrap if the screen size is too small */
 }
 
 .column {
-    background-color: #ffffff; /* White background */
-    border: 1px solid #000000; /* Black border */
+    background-color: #ffffff;
+    border: 1px solid #000000;
     border-radius: 5px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow for more depth */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     padding: 15px;
     flex: 1;
     min-width: 240px;
@@ -44,74 +45,58 @@ main {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    min-height: 150px; /* Base height for the column */
-    transition: min-height 0.2s ease-in-out; /* Smooth transition for height change */
+    min-height: 150px;
+    transition: min-height 0.2s ease-in-out;
 }
 
-.column.hovering {
-    min-height: 200px; /* Increase the height when hovering */
-}
-
-/* Header in Each Category */
-.column h2 {
-    font-size: 18px;
-    margin: 0 0 10px 0;
-    text-align: center;
-    color: #333;
-}
-
-/* Container for Button and Input */
+/* Additional adjustments */
 .column .input-container {
     display: flex;
     align-items: center;
-    justify-content: flex-start; /* Align items to the left */
-    gap: 10px; /* Add some gap between the button and input field */
-    margin-top: 10px; /* Spacing between input and top elements */
+    justify-content: flex-start;
+    gap: 10px;
+    margin-top: 10px;
 }
 
-/* Add Task Button Styling */
 .add-task-button {
     background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 8px; /* Slightly rounded edges */
-    padding: 8px 12px; /* Adjusted padding */
+    border-radius: 8px;
+    padding: 8px 12px;
     cursor: pointer;
     font-size: 18px;
     box-sizing: border-box;
-    flex-shrink: 0; /* Prevent the button from shrinking */
-    transition: transform 0.2s ease-in-out; /* Smooth transition effect */
+    flex-shrink: 0;
+    transition: transform 0.2s ease-in-out;
 }
 
 .add-task-button:hover {
-    transform: scale(1.1); /* Slightly grow the button on hover */
+    transform: scale(1.1);
 }
 
-/* Task Input Area */
 .task-input {
-    width: 120px; /* Reduced width for the input field */
+    width: 120px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
     font-size: 14px;
-    min-width: 0; /* Prevents input from shrinking too much */
+    min-width: 0;
 }
 
-/* Task List Styling */
 .task-list {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-top: 20px; /* Spacing between task list and input area */
+    margin-top: 20px;
 }
 
-/* Task Card Styling */
 .task-card {
-    background-color: #ffffff; /* White background */
+    background-color: #ffffff;
     border-radius: 3px;
     padding: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Shadow for a professional look */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     font-size: 14px;
     color: #333;
     cursor: pointer;
@@ -119,20 +104,19 @@ main {
 }
 
 .task-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Increase shadow on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* Trash Bin Styling */
 .trash-bin {
     position: fixed;
     bottom: 20px;
     right: 20px;
     cursor: pointer;
     transition: transform 0.3s;
-    font-size: 40px; /* Larger size for the trash icon */
-    color: #e74c3c; /* Red color */
+    font-size: 40px;
+    color: #e74c3c;
 }
 
 .trash-bin:hover {
-    transform: scale(1.2); /* Grow in size when hovered */
+    transform: scale(1.2);
 }

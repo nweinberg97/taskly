@@ -24,7 +24,7 @@ header {
 /* Main Section Layout */
 main {
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* Center columns instead of spacing them out */
     gap: 20px;
     padding: 20px;
     width: 100%;

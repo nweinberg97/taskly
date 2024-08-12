@@ -60,6 +60,7 @@ main {
     display: flex;
     align-items: center;
     justify-content: flex-start; /* Align items to the left */
+    gap: 10px; /* Add some gap between the button and input field */
     margin-top: 10px; /* Spacing between input and top elements */
 }
 
@@ -70,13 +71,9 @@ main {
     border: none;
     border-radius: 8px; /* Slightly rounded edges */
     padding: 8px 12px; /* Adjusted padding */
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
     cursor: pointer;
     font-size: 18px;
     box-sizing: border-box;
-    margin-right: 10px; /* Space between button and input */
     flex-shrink: 0; /* Prevent the button from shrinking */
     transition: transform 0.2s ease-in-out; /* Smooth transition effect */
 }

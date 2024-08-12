@@ -64,9 +64,9 @@ main {
     margin-top: 10px; /* Spacing between input and top elements */
 }
 
-.column.hovering {
-    min-height: 50px; /* Ensures there's enough space to drop */
-    background-color: #f0f0f0; /* Slight background color change to indicate drop zone */
+.column.hovering > .task-list {
+    min-height: 50px;
+    background-color: #f0f0f0;
 }
 
 /* Add Task Button Styling */

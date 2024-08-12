@@ -67,22 +67,32 @@ function dragEnd(event) {
         event.target.style.display = 'block';
         draggedTask = null;
         saveTasks(); // Save the updated tasks after reordering
+        removeHoverClass(); // Ensure hovering class is removed after drag ends
     }, 0);
 }
 
-// Dragover event for columns
+// Add hovering class on dragover
 columns.forEach(column => {
     column.addEventListener('dragover', event => {
-        event.preventDefault(); // Prevent default to allow drop
+        event.preventDefault(); // Allow the drop
+        if (column.querySelectorAll('.task-card').length === 0) {
+            column.classList.add('hovering');
+        }
     });
 
-    // Drop event for columns
+    // Remove hovering class on drop
     column.addEventListener('drop', event => {
         event.preventDefault();
         if (draggedTask) {
             column.appendChild(draggedTask); // Append dragged task to the column
             saveTasks(); // Save the updated tasks after drop
         }
+        column.classList.remove('hovering');
+    });
+
+    // Remove hovering class if dragged out
+    column.addEventListener('dragleave', event => {
+        column.classList.remove('hovering');
     });
 });
 
@@ -146,4 +156,11 @@ function loadTasks() {
             });
         });
     }
+}
+
+// Function to remove hovering class from all columns
+function removeHoverClass() {
+    columns.forEach(column => {
+        column.classList.remove('hovering');
+    });
 }

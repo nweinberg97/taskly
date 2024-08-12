@@ -71,6 +71,8 @@ main {
     border: none;
     border-radius: 8px; /* Slightly rounded edges */
     padding: 8px 10px; /* Adjusted padding */
+    width: 40px; /* Set the width */
+    height: 40px; /* Set the height to match the width */
     cursor: pointer;
     font-size: 18px;
     box-sizing: border-box;
@@ -84,7 +86,7 @@ main {
 
 /* Task Input Area */
 .task-input {
-    width: 150px; /* Reduced width for the input field */
+    width: 175px; /* Reduced width for the input field */
     padding: 8px; /* Adjusted padding */
     border: 1px solid #ccc;
     border-radius: 5px;

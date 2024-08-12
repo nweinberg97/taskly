@@ -32,7 +32,6 @@ main {
     box-sizing: border-box;
 }
 
-/* Category Container Styling */
 .column {
     background-color: #ffffff; /* White background */
     border: 1px solid #000000; /* Black border */
@@ -40,11 +39,17 @@ main {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow for more depth */
     padding: 15px;
     flex: 1;
-    min-width: 200px;
-    max-width: 220px; /* Set a maximum width */
+    min-width: 240px;
+    max-width: 260px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+    min-height: 150px; /* Base height for the column */
+    transition: min-height 0.2s ease-in-out; /* Smooth transition for height change */
+}
+
+.column.hovering {
+    min-height: 200px; /* Increase the height when hovering */
 }
 
 /* Header in Each Category */

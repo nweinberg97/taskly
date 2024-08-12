@@ -25,7 +25,7 @@ header {
 main {
     display: flex;
     justify-content: center; /* Center the columns */
-    gap: 20px;
+    gap: 10px; /* Reduce the gap to make columns fit better */
     padding: 20px;
     width: 100%;
     max-width: 1200px;
@@ -40,8 +40,8 @@ main {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     padding: 15px;
     flex: 1;
-    min-width: 240px;
-    max-width: 260px;
+    min-width: 180px; /* Narrower minimum width */
+    max-width: 200px; /* Narrower maximum width */
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -49,23 +49,28 @@ main {
     transition: min-height 0.2s ease-in-out;
 }
 
-/* Additional adjustments */
+.column.hovering {
+    min-height: 200px; /* Increase the height when hovering */
+}
+
+/* Container for Button and Input */
 .column .input-container {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 10px;
+    gap: 8px; /* Reduce gap between button and input */
     margin-top: 10px;
 }
 
+/* Add Task Button Styling */
 .add-task-button {
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 8px;
-    padding: 8px 12px;
+    padding: 8px 10px; /* Adjusted padding */
     cursor: pointer;
-    font-size: 18px;
+    font-size: 16px; /* Slightly smaller font */
     box-sizing: border-box;
     flex-shrink: 0;
     transition: transform 0.2s ease-in-out;
@@ -75,9 +80,10 @@ main {
     transform: scale(1.1);
 }
 
+/* Task Input Area */
 .task-input {
-    width: 120px;
-    padding: 8px;
+    width: 100px; /* Narrower input field */
+    padding: 6px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
@@ -85,17 +91,19 @@ main {
     min-width: 0;
 }
 
+/* Task List Styling */
 .task-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px; /* Reduce gap between task cards */
     margin-top: 20px;
 }
 
+/* Task Card Styling */
 .task-card {
     background-color: #ffffff;
     border-radius: 3px;
-    padding: 10px;
+    padding: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     font-size: 14px;
     color: #333;
@@ -107,6 +115,7 @@ main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
+/* Trash Bin Styling */
 .trash-bin {
     position: fixed;
     bottom: 20px;

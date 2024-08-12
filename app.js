@@ -20,16 +20,30 @@ function enableDragAndDrop() {
         column.addEventListener('dragover', (e) => {
             e.preventDefault();
             const draggingTask = document.querySelector('.dragging');
-            if (column.children.length === 0) {
+            const afterElement = getDragAfterElement(column, e.clientY);
+            if (afterElement == null) {
                 column.appendChild(draggingTask);
             } else {
-                const afterElement = getDragAfterElement(column, e.clientY);
-                if (afterElement == null) {
-                    column.appendChild(draggingTask);
-                } else {
-                    column.insertBefore(draggingTask, afterElement);
-                }
+                column.insertBefore(draggingTask, afterElement);
             }
+        });
+
+        column.addEventListener('dragenter', () => {
+            if (column.querySelector('.task-card') === null) {
+                column.classList.add('hovering');
+            }
+        });
+
+        column.addEventListener('dragleave', () => {
+            column.classList.remove('hovering');
+        });
+
+        column.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const draggingTask = document.querySelector('.dragging');
+            column.appendChild(draggingTask);
+            column.classList.remove('hovering');
+            saveSessionData(); // Save the session data after dropping
         });
     });
 }

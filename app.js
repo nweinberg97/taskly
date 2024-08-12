@@ -1,104 +1,42 @@
-// Select all necessary elements
-const addTaskButtons = document.querySelectorAll('.add-task-button');
-const taskInputFields = document.querySelectorAll('.task-input');
-const columns = document.querySelectorAll('.task-list');
-const trashBin = document.getElementById('trash-bin');
+// Function to initialize drag and drop functionality
+function enableDragAndDrop() {
+    const taskCards = document.querySelectorAll('.task-card');
+    const columns = document.querySelectorAll('.task-list');
 
-// Load the sound file
-const trashSound = new Audio('sounds/plastic-crunch-83779.mp3');
+    // Adding event listeners to task cards for dragging
+    taskCards.forEach(task => {
+        task.addEventListener('dragstart', () => {
+            task.classList.add('dragging');
+        });
 
-// Load tasks from local storage
-window.onload = () => {
-    loadTasks();
-}
-
-// Function to create a new task card
-function createTaskCard(taskText) {
-    const taskCard = document.createElement('div');
-    taskCard.classList.add('task-card');
-    taskCard.textContent = taskText;
-    taskCard.draggable = true;
-
-    // Add drag events
-    taskCard.addEventListener('dragstart', dragStart);
-    taskCard.addEventListener('dragend', dragEnd);
-
-    return taskCard;
-}
-
-// Function to handle adding tasks
-function addTask(event) {
-    const inputField = event.target.nextElementSibling || event.target;
-    const taskText = inputField.value.trim();
-
-    if (taskText !== '') {
-        const taskList = inputField.parentElement.nextElementSibling;
-        const taskCard = createTaskCard(taskText);
-        taskList.appendChild(taskCard);
-        inputField.value = ''; // Clear the input field
-        saveTasks(); // Save the updated tasks
-    }
-}
-
-// Event listeners for adding tasks via button click
-addTaskButtons.forEach(button => {
-    button.addEventListener('click', addTask);
-});
-
-// Event listeners for adding tasks via Enter key
-taskInputFields.forEach(inputField => {
-    inputField.addEventListener('keydown', event => {
-        if (event.key === 'Enter') {
-            addTask(event);
-        }
-    });
-});
-
-// Drag and drop functionality
-let draggedTask = null;
-
-function dragStart(event) {
-    draggedTask = event.target;
-    setTimeout(() => event.target.style.display = 'none', 0);
-}
-
-function dragEnd(event) {
-    setTimeout(() => {
-        event.target.style.display = 'block';
-        draggedTask = null;
-        saveTasks(); // Save the updated tasks after reordering
-        removeHoverClass(); // Ensure hovering class is removed after drag ends
-    }, 0);
-}
-
-// Add hovering class on dragover
-columns.forEach(column => {
-    column.addEventListener('dragover', event => {
-        event.preventDefault(); // Allow the drop
-        if (column.querySelectorAll('.task-card').length === 0) {
-            column.classList.add('hovering');
-        }
+        task.addEventListener('dragend', () => {
+            task.classList.remove('dragging');
+            saveSessionData(); // Save the session data when dragging ends
+        });
     });
 
-    // Remove hovering class on drop
-    column.addEventListener('drop', event => {
-        event.preventDefault();
-        if (draggedTask) {
-            column.appendChild(draggedTask); // Append dragged task to the column
-            saveTasks(); // Save the updated tasks after drop
-        }
-        column.classList.remove('hovering');
+    // Adding event listeners to columns for drag over and drop
+    columns.forEach(column => {
+        column.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const draggingTask = document.querySelector('.dragging');
+            if (column.children.length === 0) {
+                column.appendChild(draggingTask);
+            } else {
+                const afterElement = getDragAfterElement(column, e.clientY);
+                if (afterElement == null) {
+                    column.appendChild(draggingTask);
+                } else {
+                    column.insertBefore(draggingTask, afterElement);
+                }
+            }
+        });
     });
+}
 
-    // Remove hovering class if dragged out
-    column.addEventListener('dragleave', event => {
-        column.classList.remove('hovering');
-    });
-});
-
-// Function to get the element after which the dragged element should be placed
-function getDragAfterElement(container, y) {
-    const draggableElements = [...container.querySelectorAll('.task-card:not(.dragging)')];
+// Function to determine the correct position to insert a dragged task
+function getDragAfterElement(column, y) {
+    const draggableElements = [...column.querySelectorAll('.task-card:not(.dragging)')];
 
     return draggableElements.reduce((closest, child) => {
         const box = child.getBoundingClientRect();
@@ -111,56 +49,113 @@ function getDragAfterElement(container, y) {
     }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
 
-// Dragover event for trash bin
-trashBin.addEventListener('dragover', event => {
-    event.preventDefault();
-});
+// Function to add a new task to a column
+function addTaskToColumn(column) {
+    const taskInput = column.querySelector('.task-input');
+    const taskList = column.querySelector('.task-list');
 
-// Drop event for trash bin to delete tasks and play sound
-trashBin.addEventListener('drop', () => {
-    if (draggedTask) {
-        draggedTask.remove();
-        trashSound.play(); // Play the trash sound effect
-        saveTasks(); // Save the updated tasks after deletion
-    }
-});
+    const taskText = taskInput.value.trim();
+    if (taskText === '') return;
 
-// Function to save tasks to local storage
-function saveTasks() {
-    const tasks = {};
+    const newTask = document.createElement('div');
+    newTask.classList.add('task-card');
+    newTask.setAttribute('draggable', 'true');
+    newTask.textContent = taskText;
 
-    columns.forEach((column, index) => {
-        const taskCards = column.querySelectorAll('.task-card');
-        tasks[`column-${index}`] = [];
+    // Add the new task to the task list
+    taskList.appendChild(newTask);
 
-        taskCards.forEach(taskCard => {
-            tasks[`column-${index}`].push(taskCard.textContent);
-        });
-    });
+    // Clear the input field
+    taskInput.value = '';
 
-    localStorage.setItem('taskly-tasks', JSON.stringify(tasks));
+    // Re-enable drag and drop for the new task
+    enableDragAndDrop();
+
+    // Save session data
+    saveSessionData();
 }
 
-// Function to load tasks from local storage
-function loadTasks() {
-    const savedTasks = JSON.parse(localStorage.getItem('taskly-tasks'));
+// Function to handle adding task when the enter key is pressed
+function enableTaskInput() {
+    const columns = document.querySelectorAll('.column');
 
-    if (savedTasks) {
-        Object.keys(savedTasks).forEach((key, index) => {
-            const columnTasks = savedTasks[key];
-            const column = columns[index];
-
-            columnTasks.forEach(taskText => {
-                const taskCard = createTaskCard(taskText);
-                column.appendChild(taskCard);
-            });
-        });
-    }
-}
-
-// Function to remove hovering class from all columns
-function removeHoverClass() {
     columns.forEach(column => {
-        column.classList.remove('hovering');
+        const addButton = column.querySelector('.add-task-button');
+        const taskInput = column.querySelector('.task-input');
+
+        addButton.addEventListener('click', () => addTaskToColumn(column));
+
+        taskInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                addTaskToColumn(column);
+            }
+        });
     });
 }
+
+// Function to handle trash bin functionality
+function enableTrashBin() {
+    const trashBin = document.querySelector('.trash-bin');
+    const sound = new Audio('sounds/plastic-crunch-83779.mp3'); // Add your path to the sound
+
+    trashBin.addEventListener('dragover', (e) => {
+        e.preventDefault();
+    });
+
+    trashBin.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const draggingTask = document.querySelector('.dragging');
+        if (draggingTask) {
+            draggingTask.remove();
+            sound.play(); // Play sound when task is deleted
+            saveSessionData(); // Save session data after deletion
+        }
+    });
+}
+
+// Function to save session data to localStorage
+function saveSessionData() {
+    const columnsData = {};
+    const columns = document.querySelectorAll('.column');
+    
+    columns.forEach(column => {
+        const columnId = column.id;
+        const tasks = [...column.querySelectorAll('.task-card')].map(task => task.textContent);
+        columnsData[columnId] = tasks;
+    });
+
+    localStorage.setItem('tasklyData', JSON.stringify(columnsData));
+}
+
+// Function to load session data from localStorage
+function loadSessionData() {
+    const columnsData = JSON.parse(localStorage.getItem('tasklyData'));
+
+    if (!columnsData) return;
+
+    Object.keys(columnsData).forEach(columnId => {
+        const column = document.getElementById(columnId);
+        const taskList = column.querySelector('.task-list');
+        taskList.innerHTML = ''; // Clear existing tasks
+
+        columnsData[columnId].forEach(taskText => {
+            const task = document.createElement('div');
+            task.classList.add('task-card');
+            task.setAttribute('draggable', 'true');
+            task.textContent = taskText;
+            taskList.appendChild(task);
+        });
+    });
+
+    enableDragAndDrop(); // Re-enable drag and drop for loaded tasks
+}
+
+// Initialize all functionality
+function initializeTaskly() {
+    loadSessionData(); // Load session data when the page is loaded
+    enableDragAndDrop();
+    enableTaskInput();
+    enableTrashBin();
+}
+
+document.addEventListener('DOMContentLoaded', initializeTaskly);

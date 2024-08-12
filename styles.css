@@ -84,12 +84,13 @@ main {
 
 /* Task Input Area */
 .task-input {
-    flex-grow: 1; /* Allow the input field to take up the remaining space */
-    padding: 10px;
+    width: 120px; /* Reduced width for the input field */
+    padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
     font-size: 14px;
+    min-width: 0; /* Prevents input from shrinking too much */
 }
 
 /* Task List Styling */

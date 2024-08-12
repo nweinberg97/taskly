@@ -25,14 +25,15 @@ header {
 main {
     display: flex;
     justify-content: center; /* Center the columns */
-    gap: 10px; /* Reduce the gap to make columns fit better */
+    gap: 10px; /* Adjusted gap for better spacing */
     padding: 20px;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1200px; /* Limit the max-width to keep it centered on large screens */
     box-sizing: border-box;
     flex-wrap: wrap; /* Ensure columns wrap if the screen size is too small */
 }
 
+/* Column Styling */
 .column {
     background-color: #ffffff;
     border: 1px solid #000000;
@@ -49,16 +50,12 @@ main {
     transition: min-height 0.2s ease-in-out;
 }
 
-.column.hovering {
-    min-height: 200px; /* Increase the height when hovering */
-}
-
-/* Container for Button and Input */
+/* Input Container */
 .column .input-container {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 8px; /* Reduce gap between button and input */
+    gap: 8px; /* Reduced gap between button and input */
     margin-top: 10px;
 }
 
@@ -70,7 +67,7 @@ main {
     border-radius: 8px;
     padding: 8px 10px; /* Adjusted padding */
     cursor: pointer;
-    font-size: 16px; /* Slightly smaller font */
+    font-size: 16px; /* Consistent font size */
     box-sizing: border-box;
     flex-shrink: 0;
     transition: transform 0.2s ease-in-out;
@@ -82,7 +79,7 @@ main {
 
 /* Task Input Area */
 .task-input {
-    width: 100px; /* Narrower input field */
+    width: 100px; /* Narrower input field width */
     padding: 6px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -95,7 +92,7 @@ main {
 .task-list {
     display: flex;
     flex-direction: column;
-    gap: 8px; /* Reduce gap between task cards */
+    gap: 10px;
     margin-top: 20px;
 }
 
@@ -103,7 +100,7 @@ main {
 .task-card {
     background-color: #ffffff;
     border-radius: 3px;
-    padding: 8px;
+    padding: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     font-size: 14px;
     color: #333;

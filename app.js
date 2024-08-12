@@ -73,12 +73,15 @@ function dragEnd(event) {
 // Dragover event for columns
 columns.forEach(column => {
     column.addEventListener('dragover', event => {
+        event.preventDefault(); // Prevent default to allow drop
+    });
+
+    // Drop event for columns
+    column.addEventListener('drop', event => {
         event.preventDefault();
-        const afterElement = getDragAfterElement(column, event.clientY);
-        if (afterElement == null) {
-            column.appendChild(draggedTask); // Append to the column if empty
-        } else {
-            column.insertBefore(draggedTask, afterElement);
+        if (draggedTask) {
+            column.appendChild(draggedTask); // Append dragged task to the column
+            saveTasks(); // Save the updated tasks after drop
         }
     });
 });
@@ -144,4 +147,3 @@ function loadTasks() {
         });
     }
 }
-

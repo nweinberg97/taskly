@@ -47,6 +47,17 @@ main {
     flex-direction: column;
 }
 
+.column::after {
+    content: '';
+    display: block;
+    height: 30px; /* Adds an invisible drop area */
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+}
+
 /* Header in Each Category */
 .column h2 {
     font-size: 18px;

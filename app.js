@@ -41,7 +41,12 @@ function enableDragAndDrop() {
         column.addEventListener('drop', (e) => {
             e.preventDefault();
             const draggingTask = document.querySelector('.dragging');
-            column.appendChild(draggingTask);
+            const afterElement = getDragAfterElement(column, e.clientY);
+            if (afterElement == null) {
+                column.appendChild(draggingTask);
+            } else {
+                column.insertBefore(draggingTask, afterElement);
+            }
             column.classList.remove('hovering');
             saveSessionData(); // Save the session data after dropping
         });

@@ -21,56 +21,35 @@ function enableDragAndDrop() {
             e.preventDefault();
             const draggingTask = document.querySelector('.dragging');
             const afterElement = getDragAfterElement(column, e.clientY);
-            if (afterElement == null) {
-                column.appendChild(draggingTask);
-            } else {
-                column.insertBefore(draggingTask, afterElement);
+            if (afterElement == null && column.querySelector('.task-card') === null) {
+                column.appendChild(draggingTask); // Append directly if the column is empty
+            } else if (afterElement != null) {
+                column.insertBefore(draggingTask, afterElement); // Insert before the identified element
             }
         });
 
         column.addEventListener('dragenter', (e) => {
             e.preventDefault();
-            if (column.querySelector('.task-card') === null) {
-                createTemporaryDropZone(column); // Create a temporary drop zone if the column is empty
-            }
+            column.classList.add('hovering');
         });
 
         column.addEventListener('dragleave', () => {
-            if (column.querySelector('.task-card') === null) {
-                removeTemporaryDropZone(column); // Remove the temporary drop zone when dragging leaves an empty column
-            }
+            column.classList.remove('hovering');
         });
 
         column.addEventListener('drop', (e) => {
             e.preventDefault();
             const draggingTask = document.querySelector('.dragging');
             const afterElement = getDragAfterElement(column, e.clientY);
-            if (afterElement == null) {
-                column.appendChild(draggingTask);
-            } else {
-                column.insertBefore(draggingTask, afterElement);
+            if (afterElement == null && column.querySelector('.task-card') === null) {
+                column.appendChild(draggingTask); // Append if the column is empty
+            } else if (afterElement != null) {
+                column.insertBefore(draggingTask, afterElement); // Insert in the correct position
             }
-            removeTemporaryDropZone(column); // Ensure the temporary drop zone is removed after dropping
+            column.classList.remove('hovering');
             saveSessionData(); // Save the session data after dropping
         });
     });
-}
-
-// Function to create a temporary drop zone in an empty column
-function createTemporaryDropZone(column) {
-    const placeholder = document.createElement('div');
-    placeholder.classList.add('temporary-drop-zone');
-    placeholder.style.height = '50px'; // Set a temporary height that mimics a task card
-    placeholder.style.visibility = 'hidden'; // Make it invisible
-    column.appendChild(placeholder);
-}
-
-// Function to remove the temporary drop zone from a column
-function removeTemporaryDropZone(column) {
-    const placeholder = column.querySelector('.temporary-drop-zone');
-    if (placeholder) {
-        placeholder.remove();
-    }
 }
 
 // Function to determine the correct position to insert a dragged task

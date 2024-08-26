@@ -7,12 +7,12 @@ function enableDragAndDrop() {
     taskCards.forEach(task => {
         task.addEventListener('dragstart', () => {
             task.classList.add('dragging');
-            console.log('Dragging task:', task.textContent); // Debugging log
         });
 
         task.addEventListener('dragend', () => {
             task.classList.remove('dragging');
-            console.log('Stopped dragging task:', task.textContent); // Debugging log
+            const columns = document.querySelectorAll('.column');
+            columns.forEach(column => column.classList.remove('hovering')); // Ensure hovering class is removed on dragend
             saveSessionData(); // Save the session data when dragging ends
         });
     });
@@ -21,26 +21,23 @@ function enableDragAndDrop() {
     columns.forEach(column => {
         column.addEventListener('dragover', (e) => {
             e.preventDefault();
+            column.parentElement.classList.add('hovering'); // Add hovering class to the parent column
             const draggingTask = document.querySelector('.dragging');
             const afterElement = getDragAfterElement(column, e.clientY);
             if (afterElement == null) {
-                console.log('Appending task to column:', column.parentElement.id); // Debugging log
                 column.appendChild(draggingTask); // If no element found, append to the column
             } else {
-                console.log('Inserting task before:', afterElement.textContent); // Debugging log
                 column.insertBefore(draggingTask, afterElement); // Insert before the identified element
             }
         });
 
         column.addEventListener('dragenter', (e) => {
             e.preventDefault();
-            console.log('Entered column:', column.parentElement.id); // Debugging log
-            column.classList.add('hovering');
+            column.parentElement.classList.add('hovering'); // Add hovering class to the parent column
         });
 
         column.addEventListener('dragleave', () => {
-            console.log('Left column:', column.parentElement.id); // Debugging log
-            column.classList.remove('hovering');
+            column.parentElement.classList.remove('hovering'); // Remove hovering class when leaving
         });
 
         column.addEventListener('drop', (e) => {
@@ -48,13 +45,11 @@ function enableDragAndDrop() {
             const draggingTask = document.querySelector('.dragging');
             const afterElement = getDragAfterElement(column, e.clientY);
             if (afterElement == null) {
-                console.log('Dropped task in column:', column.parentElement.id); // Debugging log
                 column.appendChild(draggingTask); // If no element found, append to the column
             } else {
-                console.log('Dropped task before:', afterElement.textContent); // Debugging log
                 column.insertBefore(draggingTask, afterElement); // Insert in the correct position
             }
-            column.classList.remove('hovering');
+            column.parentElement.classList.remove('hovering'); // Remove hovering class on drop
             saveSessionData(); // Save the session data after dropping
         });
     });
@@ -66,7 +61,6 @@ function getDragAfterElement(column, y) {
 
     // If no draggable elements exist (column is empty), return null to append the card
     if (draggableElements.length === 0) {
-        console.log('No elements in column:', column.parentElement.id); // Debugging log
         return null;
     }
 
@@ -96,8 +90,6 @@ function addTaskToColumn(column) {
 
     // Add the new task to the task list
     taskList.appendChild(newTask);
-
-    console.log('Added new task:', taskText, 'to column:', column.id); // Debugging log
 
     // Clear the input field
     taskInput.value = '';
@@ -140,7 +132,6 @@ function enableTrashBin() {
         e.preventDefault();
         const draggingTask = document.querySelector('.dragging');
         if (draggingTask) {
-            console.log('Deleted task:', draggingTask.textContent); // Debugging log
             draggingTask.remove();
             sound.play(); // Play sound when task is deleted
             saveSessionData(); // Save session data after deletion
@@ -157,7 +148,6 @@ function saveSessionData() {
         const columnId = column.id;
         const tasks = [...column.querySelectorAll('.task-card')].map(task => task.textContent);
         columnsData[columnId] = tasks;
-        console.log('Saved tasks for column:', columnId); // Debugging log
     });
 
     localStorage.setItem('tasklyData', JSON.stringify(columnsData));
@@ -181,8 +171,6 @@ function loadSessionData() {
             task.textContent = taskText;
             taskList.appendChild(task);
         });
-
-        console.log('Loaded tasks for column:', columnId); // Debugging log
     });
 
     enableDragAndDrop(); // Re-enable drag and drop for loaded tasks

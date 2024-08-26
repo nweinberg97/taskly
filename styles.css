@@ -64,11 +64,17 @@ main {
     margin-top: 10px; /* Spacing between input and top elements */
 }
 
-/* Hovering state to show drop zone in empty columns */
-.column:hover .task-list {
-    min-height: 50px;
-    background-color: #f0f0f0; /* Light background color on hover */
-    border: 2px dashed #ccc; /* Dashed border on hover */
+/* Normal state - no visual changes */
+.task-list {
+    min-height: 50px; /* Ensures there's always space for dropping */
+    background-color: transparent; /* No background color */
+    border: none; /* No border */
+}
+
+/* Dragging state - apply visual indicators only when dragging a task card */
+.column.hovering > .task-list {
+    background-color: #f0f0f0; /* Light background color when dragging over */
+    border: 2px dashed #ccc; /* Dashed border when dragging over */
 }
 
 /* Add Task Button Styling */
@@ -101,7 +107,6 @@ main {
     font-size: 14px;
     min-width: 0; /* Prevents input from shrinking too much */
 }
-
 
 /* Task List Styling */
 .task-list {

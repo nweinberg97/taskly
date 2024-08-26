@@ -21,9 +21,9 @@ function enableDragAndDrop() {
             e.preventDefault();
             const draggingTask = document.querySelector('.dragging');
             const afterElement = getDragAfterElement(column, e.clientY);
-            if (afterElement == null && column.querySelector('.task-card') === null) {
-                column.appendChild(draggingTask); // Append directly if the column is empty
-            } else if (afterElement != null) {
+            if (afterElement == null) {
+                column.appendChild(draggingTask); // If no element found, append to the column
+            } else {
                 column.insertBefore(draggingTask, afterElement); // Insert before the identified element
             }
         });
@@ -41,9 +41,9 @@ function enableDragAndDrop() {
             e.preventDefault();
             const draggingTask = document.querySelector('.dragging');
             const afterElement = getDragAfterElement(column, e.clientY);
-            if (afterElement == null && column.querySelector('.task-card') === null) {
-                column.appendChild(draggingTask); // Append if the column is empty
-            } else if (afterElement != null) {
+            if (afterElement == null) {
+                column.appendChild(draggingTask); // If no element found, append to the column
+            } else {
                 column.insertBefore(draggingTask, afterElement); // Insert in the correct position
             }
             column.classList.remove('hovering');
@@ -55,6 +55,11 @@ function enableDragAndDrop() {
 // Function to determine the correct position to insert a dragged task
 function getDragAfterElement(column, y) {
     const draggableElements = [...column.querySelectorAll('.task-card:not(.dragging)')];
+
+    // If no draggable elements exist (column is empty), return null to append the card
+    if (draggableElements.length === 0) {
+        return null;
+    }
 
     return draggableElements.reduce((closest, child) => {
         const box = child.getBoundingClientRect();

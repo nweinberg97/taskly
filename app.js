@@ -5,87 +5,101 @@ function enableDragAndDrop() {
 
     // Adding event listeners to task cards for dragging
     taskCards.forEach(task => {
-        // Event listener for when the user starts dragging a task
         task.addEventListener('dragstart', () => {
-            task.classList.add('dragging'); // Add a class to the task indicating it's being dragged
+            task.classList.add('dragging');
         });
 
-        // Event listener for when the user stops dragging a task
         task.addEventListener('dragend', () => {
-            task.classList.remove('dragging'); // Remove the class when dragging ends
+            task.classList.remove('dragging');
             saveSessionData(); // Save the session data when dragging ends
         });
     });
 
     // Adding event listeners to columns for drag over and drop
     columns.forEach(column => {
-        // Event listener for when a dragged task is over a column
         column.addEventListener('dragover', (e) => {
-            e.preventDefault(); // Prevent the default behavior to allow dropping
-            const draggingTask = document.querySelector('.dragging'); // Get the currently dragged task
-            const afterElement = getDragAfterElement(column, e.clientY); // Determine where to place the dragged task
+            e.preventDefault();
+            const draggingTask = document.querySelector('.dragging');
+            const afterElement = getDragAfterElement(column, e.clientY);
             if (afterElement == null) {
-                column.appendChild(draggingTask); // If there's no task below, append to the end
+                column.appendChild(draggingTask);
             } else {
-                column.insertBefore(draggingTask, afterElement); // Otherwise, insert before the next task
+                column.insertBefore(draggingTask, afterElement);
             }
         });
 
-        // Event listener for when the dragged task enters a column
         column.addEventListener('dragenter', (e) => {
-            e.preventDefault(); // Allow the dragenter event to be handled
-            column.classList.add('hovering'); // Add a visual indication that the column is a valid drop zone
-        });
-
-        // Event listener for when the dragged task leaves a column
-        column.addEventListener('dragleave', () => {
-            column.classList.remove('hovering'); // Remove the visual indication
-        });
-
-        // Event listener for when the dragged task is dropped in a column
-        column.addEventListener('drop', (e) => {
-            e.preventDefault(); // Prevent default to handle the drop
-            const draggingTask = document.querySelector('.dragging'); // Get the dragged task
-            const afterElement = getDragAfterElement(column, e.clientY); // Determine where to place the dragged task
-            if (afterElement == null) {
-                column.appendChild(draggingTask); // Append to the end if there's no other task
-            } else {
-                column.insertBefore(draggingTask, afterElement); // Insert before the next task
+            e.preventDefault();
+            if (column.querySelector('.task-card') === null) {
+                createTemporaryDropZone(column); // Create a temporary drop zone if the column is empty
             }
-            column.classList.remove('hovering'); // Remove the hovering class after drop
+        });
+
+        column.addEventListener('dragleave', () => {
+            if (column.querySelector('.task-card') === null) {
+                removeTemporaryDropZone(column); // Remove the temporary drop zone when dragging leaves an empty column
+            }
+        });
+
+        column.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const draggingTask = document.querySelector('.dragging');
+            const afterElement = getDragAfterElement(column, e.clientY);
+            if (afterElement == null) {
+                column.appendChild(draggingTask);
+            } else {
+                column.insertBefore(draggingTask, afterElement);
+            }
+            removeTemporaryDropZone(column); // Ensure the temporary drop zone is removed after dropping
             saveSessionData(); // Save the session data after dropping
         });
     });
 }
 
+// Function to create a temporary drop zone in an empty column
+function createTemporaryDropZone(column) {
+    const placeholder = document.createElement('div');
+    placeholder.classList.add('temporary-drop-zone');
+    placeholder.style.height = '50px'; // Set a temporary height that mimics a task card
+    placeholder.style.visibility = 'hidden'; // Make it invisible
+    column.appendChild(placeholder);
+}
+
+// Function to remove the temporary drop zone from a column
+function removeTemporaryDropZone(column) {
+    const placeholder = column.querySelector('.temporary-drop-zone');
+    if (placeholder) {
+        placeholder.remove();
+    }
+}
+
 // Function to determine the correct position to insert a dragged task
 function getDragAfterElement(column, y) {
-    const draggableElements = [...column.querySelectorAll('.task-card:not(.dragging)')]; // Get all draggable tasks except the one being dragged
+    const draggableElements = [...column.querySelectorAll('.task-card:not(.dragging)')];
 
-    // Reduce the list of elements to find the closest one to the current cursor position
     return draggableElements.reduce((closest, child) => {
-        const box = child.getBoundingClientRect(); // Get the bounding box of the element
-        const offset = y - box.top - box.height / 2; // Calculate the distance between the cursor and the element's center
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
         if (offset < 0 && offset > closest.offset) {
-            return { offset: offset, element: child }; // If the cursor is above the element, return it as closest
+            return { offset: offset, element: child };
         } else {
-            return closest; // Otherwise, keep the current closest
+            return closest;
         }
-    }, { offset: Number.NEGATIVE_INFINITY }).element; // Start with an infinitely negative offset
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
 
 // Function to add a new task to a column
 function addTaskToColumn(column) {
-    const taskInput = column.querySelector('.task-input'); // Get the input field for the task
-    const taskList = column.querySelector('.task-list'); // Get the list of tasks in the column
+    const taskInput = column.querySelector('.task-input');
+    const taskList = column.querySelector('.task-list');
 
-    const taskText = taskInput.value.trim(); // Get the task text and remove extra whitespace
-    if (taskText === '') return; // If the input is empty, do nothing
+    const taskText = taskInput.value.trim();
+    if (taskText === '') return;
 
-    const newTask = document.createElement('div'); // Create a new div for the task card
-    newTask.classList.add('task-card'); // Add the appropriate class
-    newTask.setAttribute('draggable', 'true'); // Make the task card draggable
-    newTask.textContent = taskText; // Set the task text
+    const newTask = document.createElement('div');
+    newTask.classList.add('task-card');
+    newTask.setAttribute('draggable', 'true');
+    newTask.textContent = taskText;
 
     // Add the new task to the task list
     taskList.appendChild(newTask);
@@ -100,18 +114,16 @@ function addTaskToColumn(column) {
     saveSessionData();
 }
 
-// Function to handle adding a task when the enter key is pressed
+// Function to handle adding task when the enter key is pressed
 function enableTaskInput() {
-    const columns = document.querySelectorAll('.column'); // Get all columns
+    const columns = document.querySelectorAll('.column');
 
     columns.forEach(column => {
-        const addButton = column.querySelector('.add-task-button'); // Get the add task button
-        const taskInput = column.querySelector('.task-input'); // Get the task input field
+        const addButton = column.querySelector('.add-task-button');
+        const taskInput = column.querySelector('.task-input');
 
-        // Event listener for when the add task button is clicked
         addButton.addEventListener('click', () => addTaskToColumn(column));
 
-        // Event listener for when the enter key is pressed
         taskInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 addTaskToColumn(column);
@@ -122,21 +134,19 @@ function enableTaskInput() {
 
 // Function to handle trash bin functionality
 function enableTrashBin() {
-    const trashBin = document.querySelector('.trash-bin'); // Get the trash bin element
-    const sound = new Audio('sounds/plastic-crunch-83779.mp3'); // Load the sound file for trash bin
+    const trashBin = document.querySelector('.trash-bin');
+    const sound = new Audio('sounds/plastic-crunch-83779.mp3'); // Add your path to the sound
 
-    // Event listener for when a dragged task is over the trash bin
     trashBin.addEventListener('dragover', (e) => {
-        e.preventDefault(); // Prevent default to allow dropping
+        e.preventDefault();
     });
 
-    // Event listener for when a task is dropped into the trash bin
     trashBin.addEventListener('drop', (e) => {
         e.preventDefault();
-        const draggingTask = document.querySelector('.dragging'); // Get the currently dragged task
+        const draggingTask = document.querySelector('.dragging');
         if (draggingTask) {
-            draggingTask.remove(); // Remove the task from the DOM
-            sound.play(); // Play the trash bin sound effect
+            draggingTask.remove();
+            sound.play(); // Play sound when task is deleted
             saveSessionData(); // Save session data after deletion
         }
     });
@@ -144,35 +154,35 @@ function enableTrashBin() {
 
 // Function to save session data to localStorage
 function saveSessionData() {
-    const columnsData = {}; // Initialize an object to store columns data
-    const columns = document.querySelectorAll('.column'); // Get all columns
+    const columnsData = {};
+    const columns = document.querySelectorAll('.column');
     
     columns.forEach(column => {
-        const columnId = column.id; // Get the column's ID
-        const tasks = [...column.querySelectorAll('.task-card')].map(task => task.textContent); // Get all task texts in the column
-        columnsData[columnId] = tasks; // Store the tasks under the column's ID
+        const columnId = column.id;
+        const tasks = [...column.querySelectorAll('.task-card')].map(task => task.textContent);
+        columnsData[columnId] = tasks;
     });
 
-    localStorage.setItem('tasklyData', JSON.stringify(columnsData)); // Save the data to localStorage
+    localStorage.setItem('tasklyData', JSON.stringify(columnsData));
 }
 
 // Function to load session data from localStorage
 function loadSessionData() {
-    const columnsData = JSON.parse(localStorage.getItem('tasklyData')); // Parse the stored JSON data
+    const columnsData = JSON.parse(localStorage.getItem('tasklyData'));
 
-    if (!columnsData) return; // If there's no data, return
+    if (!columnsData) return;
 
     Object.keys(columnsData).forEach(columnId => {
-        const column = document.getElementById(columnId); // Get the column by ID
-        const taskList = column.querySelector('.task-list'); // Get the task list in the column
+        const column = document.getElementById(columnId);
+        const taskList = column.querySelector('.task-list');
         taskList.innerHTML = ''; // Clear existing tasks
 
         columnsData[columnId].forEach(taskText => {
-            const task = document.createElement('div'); // Create a new task card
-            task.classList.add('task-card'); // Add the appropriate class
-            task.setAttribute('draggable', 'true'); // Make the task card draggable
-            task.textContent = taskText; // Set the task text
-            taskList.appendChild(task); // Add the task to the list
+            const task = document.createElement('div');
+            task.classList.add('task-card');
+            task.setAttribute('draggable', 'true');
+            task.textContent = taskText;
+            taskList.appendChild(task);
         });
     });
 
@@ -182,10 +192,9 @@ function loadSessionData() {
 // Initialize all functionality
 function initializeTaskly() {
     loadSessionData(); // Load session data when the page is loaded
-    enableDragAndDrop(); // Initialize drag and drop functionality
-    enableTaskInput(); // Enable task input functionality
-    enableTrashBin(); // Enable trash bin functionality
+    enableDragAndDrop();
+    enableTaskInput();
+    enableTrashBin();
 }
 
-// Initialize everything once the DOM content is loaded
 document.addEventListener('DOMContentLoaded', initializeTaskly);

@@ -150,24 +150,6 @@ function addStartButton(taskCard) {
     taskCard.appendChild(startButton);
 }
 
-// Function to handle adding task when the enter key is pressed
-function enableTaskInput() {
-    const columns = document.querySelectorAll('.column');
-
-    columns.forEach(column => {
-        const addButton = column.querySelector('.add-task-button');
-        const taskInput = column.querySelector('.task-input');
-
-        addButton.addEventListener('click', () => addTaskToColumn(column));
-
-        taskInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                addTaskToColumn(column);
-            }
-        });
-    });
-}
-
 // Function to handle the Pomodoro timer
 function startPomodoroTimer(taskCard) {
     // Create the Pomodoro timer overlay
@@ -206,6 +188,24 @@ function startPomodoroTimer(taskCard) {
     // Event listener to remove the overlay when reset
     resetControl.addEventListener('click', () => {
         document.body.removeChild(timerOverlay);
+    });
+}
+
+// Function to handle adding task when the enter key is pressed
+function enableTaskInput() {
+    const columns = document.querySelectorAll('.column');
+
+    columns.forEach(column => {
+        const addButton = column.querySelector('.add-task-button');
+        const taskInput = column.querySelector('.task-input');
+
+        addButton.addEventListener('click', () => addTaskToColumn(column));
+
+        taskInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                addTaskToColumn(column);
+            }
+        });
     });
 }
 

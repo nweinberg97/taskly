@@ -50,6 +50,13 @@ function enableDragAndDrop() {
                 column.insertBefore(draggingTask, afterElement); // Insert in the correct position
             }
             column.parentElement.classList.remove('hovering'); // Remove hovering class on drop
+
+            // Add in-progress class if dropped in in-progress column
+            if (column.parentElement.id === 'in-progress') {
+                draggingTask.classList.add('in-progress');
+                addStartButton(draggingTask);
+            }
+
             saveSessionData(); // Save the session data after dropping
         });
     });
@@ -96,6 +103,7 @@ function addTaskToColumn(column) {
 
     // Add the Start button if in the in-progress column
     if (column.id === 'in-progress') {
+        newTask.classList.add('in-progress'); // Add the in-progress class
         addStartButton(newTask);
     }
 
@@ -154,38 +162,32 @@ function addStartButton(taskCard) {
 function startPomodoroTimer(taskCard) {
     // Create the Pomodoro timer overlay
     const timerOverlay = document.createElement('div');
-    timerOverlay.classList.add('pomodoro-timer-overlay');
-    
+    timerOverlay.id = 'pomodoro-overlay';
+
     // Create the timer display
     const timerDisplay = document.createElement('div');
-    timerDisplay.classList.add('timer-display');
-    timerDisplay.textContent = '20:00'; // Default timer to 20 minutes
-    
-    // Create controls (start, pause, reset)
-    const controls = document.createElement('div');
-    controls.classList.add('timer-controls');
-    
-    const startControl = document.createElement('button');
-    startControl.textContent = 'Start';
-    
-    const pauseControl = document.createElement('button');
-    pauseControl.textContent = 'Pause';
-    
-    const resetControl = document.createElement('button');
-    resetControl.textContent = 'Reset';
-    
-    controls.appendChild(startControl);
-    controls.appendChild(pauseControl);
-    controls.appendChild(resetControl);
-    
+    timerDisplay.id = 'pomodoro-timer';
+    timerDisplay.innerHTML = `
+        <div id="time-display">20:00</div>
+        <div id="timer-controls">
+            <button id="start-timer">Start</button>
+            <button id="pause-timer">Pause</button>
+            <button id="reset-timer">Reset</button>
+        </div>
+        <div class="timer-modes">
+            <button data-time="15">15 min</button>
+            <button data-time="20" class="active">20 min</button>
+            <button data-time="25">25 min</button>
+            <button data-time="30">30 min</button>
+        </div>
+    `;
+
     timerOverlay.appendChild(timerDisplay);
-    timerOverlay.appendChild(controls);
-    
     document.body.appendChild(timerOverlay);
-    
+
     // Add timer functionality here...
-    
     // Event listener to remove the overlay when reset
+    const resetControl = document.getElementById('reset-timer');
     resetControl.addEventListener('click', () => {
         document.body.removeChild(timerOverlay);
     });
@@ -266,6 +268,7 @@ function loadSessionData() {
 
             // Add the Start button if in the in-progress column
             if (columnId === 'in-progress') {
+                task.classList.add('in-progress'); // Add the in-progress class
                 addStartButton(task);
             }
         });

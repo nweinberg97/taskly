@@ -53,6 +53,24 @@
             <div class="task-list"></div>
         </div>
     </main>
+
+    <!-- Pomodoro Timer Overlay -->
+    <div id="pomodoro-overlay" class="hidden">
+        <div id="pomodoro-timer">
+            <div id="time-display">20:00</div>
+            <div id="timer-controls">
+                <button id="start-pause-button">Start</button>
+                <button id="reset-button">Reset</button>
+            </div>
+            <div class="timer-modes">
+                <button data-time="15">15 Min</button>
+                <button data-time="20" class="active">20 Min</button>
+                <button data-time="25">25 Min</button>
+                <button data-time="30">30 Min</button>
+            </div>
+        </div>
+    </div>
+
     <div class="trash-bin" id="trash-bin">
         🗑️
     </div>

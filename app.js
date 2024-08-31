@@ -51,10 +51,18 @@ function enableDragAndDrop() {
             }
             column.parentElement.classList.remove('hovering'); // Remove hovering class on drop
 
-            // Add in-progress class if dropped in in-progress column
+            // Handle in-progress and other columns
             if (column.parentElement.id === 'in-progress') {
                 draggingTask.classList.add('in-progress');
-                addStartButton(draggingTask);
+                if (!draggingTask.querySelector('.start-button')) {
+                    addStartButton(draggingTask); // Add the start button only if it doesn't exist
+                }
+            } else {
+                draggingTask.classList.remove('in-progress');
+                const startButton = draggingTask.querySelector('.start-button');
+                if (startButton) {
+                    startButton.remove(); // Remove the start button when moved out of the in-progress column
+                }
             }
 
             saveSessionData(); // Save the session data after dropping
@@ -119,7 +127,12 @@ function addTaskToColumn(column) {
 
 // Function to make a task card editable
 function makeTaskEditable(taskCard) {
-    taskCard.addEventListener('dblclick', () => {
+    taskCard.addEventListener('dblclick', (e) => {
+        // Prevent the double click from affecting the start button
+        if (e.target.classList.contains('start-button')) {
+            return;
+        }
+
         const currentText = taskCard.textContent;
         const input = document.createElement('input');
         input.type = 'text';
@@ -134,6 +147,11 @@ function makeTaskEditable(taskCard) {
         const saveTask = () => {
             taskCard.textContent = input.value.trim();
             saveSessionData(); // Save the session data after editing
+
+            // Re-add the Start button if the task is in the in-progress column
+            if (taskCard.classList.contains('in-progress')) {
+                addStartButton(taskCard);
+            }
         };
 
         input.addEventListener('blur', saveTask);
@@ -186,6 +204,7 @@ function startPomodoroTimer(taskCard) {
     document.body.appendChild(timerOverlay);
 
     // Add timer functionality here...
+
     // Event listener to remove the overlay when reset
     const resetControl = document.getElementById('reset-timer');
     resetControl.addEventListener('click', () => {
@@ -235,7 +254,7 @@ function enableTrashBin() {
 function saveSessionData() {
     const columnsData = {};
     const columns = document.querySelectorAll('.column');
-    
+
     columns.forEach(column => {
         const columnId = column.id;
         const tasks = [...column.querySelectorAll('.task-card')].map(task => task.textContent);

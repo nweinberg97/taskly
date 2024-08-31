@@ -91,6 +91,9 @@ function addTaskToColumn(column) {
     // Add the new task to the task list
     taskList.appendChild(newTask);
 
+    // Make the new task editable
+    makeTaskEditable(newTask);
+
     // Clear the input field
     taskInput.value = '';
 
@@ -99,6 +102,34 @@ function addTaskToColumn(column) {
 
     // Save session data
     saveSessionData();
+}
+
+// Function to make a task card editable
+function makeTaskEditable(taskCard) {
+    taskCard.addEventListener('dblclick', () => {
+        const currentText = taskCard.textContent;
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = currentText;
+        input.classList.add('task-edit-input');
+
+        taskCard.textContent = '';
+        taskCard.appendChild(input);
+        input.focus();
+
+        // Save the edited task when Enter is pressed or input loses focus
+        const saveTask = () => {
+            taskCard.textContent = input.value.trim();
+            saveSessionData(); // Save the session data after editing
+        };
+
+        input.addEventListener('blur', saveTask);
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                saveTask();
+            }
+        });
+    });
 }
 
 // Function to handle adding task when the enter key is pressed
@@ -170,6 +201,9 @@ function loadSessionData() {
             task.setAttribute('draggable', 'true');
             task.textContent = taskText;
             taskList.appendChild(task);
+
+            // Make the loaded task editable
+            makeTaskEditable(task);
         });
     });
 

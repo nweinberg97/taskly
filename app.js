@@ -133,19 +133,21 @@ function makeTaskEditable(taskCard) {
             return;
         }
 
-        const currentText = taskCard.textContent;
+        const currentText = taskCard.firstChild.textContent; // Avoid the button
         const input = document.createElement('input');
         input.type = 'text';
         input.value = currentText;
         input.classList.add('task-edit-input');
 
-        taskCard.textContent = '';
-        taskCard.appendChild(input);
+        // Remove only the text node, not the entire task card content
+        taskCard.firstChild.remove();
+        taskCard.insertBefore(input, taskCard.firstChild);
         input.focus();
 
         // Save the edited task when Enter is pressed or input loses focus
         const saveTask = () => {
-            taskCard.textContent = input.value.trim();
+            taskCard.firstChild.textContent = input.value.trim();
+            input.remove(); // Remove the input field
             saveSessionData(); // Save the session data after editing
 
             // Re-add the Start button if the task is in the in-progress column
@@ -165,6 +167,11 @@ function makeTaskEditable(taskCard) {
 
 // Function to add the Start button to in-progress tasks
 function addStartButton(taskCard) {
+    const existingButton = taskCard.querySelector('.start-button');
+    if (existingButton) {
+        existingButton.remove(); // Ensure no duplicate buttons
+    }
+
     const startButton = document.createElement('button');
     startButton.textContent = 'Start';
     startButton.classList.add('start-button');

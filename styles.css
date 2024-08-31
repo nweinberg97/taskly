@@ -132,6 +132,16 @@ main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Increase shadow on hover */
 }
 
+/* Editable Task Input Styling */
+.task-edit-input {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
 /* Trash Bin Styling */
 .trash-bin {
     position: fixed;

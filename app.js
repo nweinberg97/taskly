@@ -94,6 +94,11 @@ function addTaskToColumn(column) {
     // Make the new task editable
     makeTaskEditable(newTask);
 
+    // Add the Start button if in the in-progress column
+    if (column.id === 'in-progress') {
+        addStartButton(newTask);
+    }
+
     // Clear the input field
     taskInput.value = '';
 
@@ -132,6 +137,19 @@ function makeTaskEditable(taskCard) {
     });
 }
 
+// Function to add the Start button to in-progress tasks
+function addStartButton(taskCard) {
+    const startButton = document.createElement('button');
+    startButton.textContent = 'Start';
+    startButton.classList.add('start-button');
+
+    startButton.addEventListener('click', () => {
+        startPomodoroTimer(taskCard);
+    });
+
+    taskCard.appendChild(startButton);
+}
+
 // Function to handle adding task when the enter key is pressed
 function enableTaskInput() {
     const columns = document.querySelectorAll('.column');
@@ -147,6 +165,47 @@ function enableTaskInput() {
                 addTaskToColumn(column);
             }
         });
+    });
+}
+
+// Function to handle the Pomodoro timer
+function startPomodoroTimer(taskCard) {
+    // Create the Pomodoro timer overlay
+    const timerOverlay = document.createElement('div');
+    timerOverlay.classList.add('pomodoro-timer-overlay');
+    
+    // Create the timer display
+    const timerDisplay = document.createElement('div');
+    timerDisplay.classList.add('timer-display');
+    timerDisplay.textContent = '20:00'; // Default timer to 20 minutes
+    
+    // Create controls (start, pause, reset)
+    const controls = document.createElement('div');
+    controls.classList.add('timer-controls');
+    
+    const startControl = document.createElement('button');
+    startControl.textContent = 'Start';
+    
+    const pauseControl = document.createElement('button');
+    pauseControl.textContent = 'Pause';
+    
+    const resetControl = document.createElement('button');
+    resetControl.textContent = 'Reset';
+    
+    controls.appendChild(startControl);
+    controls.appendChild(pauseControl);
+    controls.appendChild(resetControl);
+    
+    timerOverlay.appendChild(timerDisplay);
+    timerOverlay.appendChild(controls);
+    
+    document.body.appendChild(timerOverlay);
+    
+    // Add timer functionality here...
+    
+    // Event listener to remove the overlay when reset
+    resetControl.addEventListener('click', () => {
+        document.body.removeChild(timerOverlay);
     });
 }
 
@@ -204,6 +263,11 @@ function loadSessionData() {
 
             // Make the loaded task editable
             makeTaskEditable(task);
+
+            // Add the Start button if in the in-progress column
+            if (columnId === 'in-progress') {
+                addStartButton(task);
+            }
         });
     });
 

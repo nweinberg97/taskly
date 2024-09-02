@@ -185,6 +185,8 @@ function addStartButton(taskCard) {
 
 // Function to handle the Pomodoro timer
 function startPomodoroTimer(taskCard) {
+    console.log("Start button clicked");
+
     // Create the Pomodoro timer overlay
     const timerOverlay = document.createElement('div');
     timerOverlay.id = 'pomodoro-overlay';
@@ -210,13 +212,51 @@ function startPomodoroTimer(taskCard) {
     timerOverlay.appendChild(timerDisplay);
     document.body.appendChild(timerOverlay);
 
-    // Add timer functionality here...
-
-    // Event listener to remove the overlay when reset
+    // Add basic timer functionality
+    const startControl = document.getElementById('start-timer');
+    const pauseControl = document.getElementById('pause-timer');
     const resetControl = document.getElementById('reset-timer');
+
+    let countdown;
+    let timeRemaining = 20 * 60; // 20 minutes in seconds
+
+    function updateDisplay() {
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        document.getElementById('time-display').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+
+    function startTimer() {
+        if (countdown) clearInterval(countdown);
+        countdown = setInterval(() => {
+            if (timeRemaining > 0) {
+                timeRemaining--;
+                updateDisplay();
+            } else {
+                clearInterval(countdown);
+                alert('Time is up!');
+            }
+        }, 1000);
+    }
+
+    function pauseTimer() {
+        if (countdown) clearInterval(countdown);
+    }
+
+    function resetTimer() {
+        pauseTimer();
+        timeRemaining = 20 * 60; // Reset to 20 minutes
+        updateDisplay();
+    }
+
+    startControl.addEventListener('click', startTimer);
+    pauseControl.addEventListener('click', pauseTimer);
     resetControl.addEventListener('click', () => {
+        resetTimer();
         document.body.removeChild(timerOverlay);
     });
+
+    document.body.appendChild(timerOverlay);
 }
 
 // Function to handle adding task when the enter key is pressed

@@ -187,6 +187,12 @@ function addStartButton(taskCard) {
 function startPomodoroTimer(taskCard) {
     console.log("Start button clicked");
 
+    // Check if there's already an overlay, remove it
+    let existingOverlay = document.getElementById('pomodoro-overlay');
+    if (existingOverlay) {
+        existingOverlay.remove();
+    }
+
     // Create the Pomodoro timer overlay
     const timerOverlay = document.createElement('div');
     timerOverlay.id = 'pomodoro-overlay';
@@ -256,7 +262,18 @@ function startPomodoroTimer(taskCard) {
         document.body.removeChild(timerOverlay);
     });
 
-    document.body.appendChild(timerOverlay);
+    // Update timeRemaining based on timer mode buttons
+    const modeButtons = document.querySelectorAll('.timer-modes button');
+    modeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            timeRemaining = parseInt(button.getAttribute('data-time')) * 60;
+            updateDisplay();
+            modeButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+        });
+    });
+
+    updateDisplay(); // Update display with the initial time
 }
 
 // Function to handle adding task when the enter key is pressed

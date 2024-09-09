@@ -125,7 +125,7 @@ function addTaskToColumn(column) {
     saveSessionData();
 }
 
-// Function to make a task card editable
+// Updated Function to make a task card editable
 function makeTaskEditable(taskCard) {
     taskCard.addEventListener('dblclick', (e) => {
         // Prevent the double click from affecting the start button
@@ -133,21 +133,36 @@ function makeTaskEditable(taskCard) {
             return;
         }
 
-        const currentText = taskCard.firstChild.textContent; // Avoid the button
+        // Get the text node within the task card (ignoring the start button and other elements)
+        const currentText = [...taskCard.childNodes].find(node => node.nodeType === Node.TEXT_NODE)?.textContent.trim() || '';
+
+        // Create the input element for editing
         const input = document.createElement('input');
         input.type = 'text';
         input.value = currentText;
         input.classList.add('task-edit-input');
 
-        // Remove only the text node, not the entire task card content
-        taskCard.firstChild.remove();
-        taskCard.insertBefore(input, taskCard.firstChild);
+        // Remove only the text node, keep other elements intact (like the Start button)
+        [...taskCard.childNodes].forEach(node => {
+            if (node.nodeType === Node.TEXT_NODE) {
+                taskCard.removeChild(node);
+            }
+        });
+
+        taskCard.insertBefore(input, taskCard.firstChild); // Insert input before any other elements (like Start button)
         input.focus();
 
-        // Save the edited task when Enter is pressed or input loses focus
+        // Function to save the task when Enter is pressed or input loses focus
         const saveTask = () => {
-            taskCard.firstChild.textContent = input.value.trim();
+            const newText = input.value.trim();
             input.remove(); // Remove the input field
+
+            if (newText !== '') {
+                taskCard.insertBefore(document.createTextNode(newText), taskCard.firstChild); // Add the new text back
+            } else {
+                taskCard.insertBefore(document.createTextNode(currentText), taskCard.firstChild); // Restore the original text if input is empty
+            }
+
             saveSessionData(); // Save the session data after editing
 
             // Re-add the Start button if the task is in the in-progress column
@@ -156,6 +171,7 @@ function makeTaskEditable(taskCard) {
             }
         };
 
+        // Event listeners to save the task on blur or pressing Enter
         input.addEventListener('blur', saveTask);
         input.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {

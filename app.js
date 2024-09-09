@@ -125,15 +125,15 @@ function addTaskToColumn(column) {
     saveSessionData();
 }
 
-// Updated Function to make a task card editable
+// Function to make a task card editable
 function makeTaskEditable(taskCard) {
     taskCard.addEventListener('dblclick', (e) => {
         // Prevent the double click from affecting the start button
         if (e.target.classList.contains('start-button')) {
-            return;
+            return; // Don't enter edit mode if we click the Start button
         }
 
-        // Get the text node within the task card (ignoring the start button and other elements)
+        // Find the text node (skip buttons or other elements)
         const currentText = [...taskCard.childNodes].find(node => node.nodeType === Node.TEXT_NODE)?.textContent.trim() || '';
 
         // Create the input element for editing
@@ -145,33 +145,34 @@ function makeTaskEditable(taskCard) {
         // Remove only the text node, keep other elements intact (like the Start button)
         [...taskCard.childNodes].forEach(node => {
             if (node.nodeType === Node.TEXT_NODE) {
-                taskCard.removeChild(node);
+                taskCard.removeChild(node); // Remove text node only
             }
         });
 
-        taskCard.insertBefore(input, taskCard.firstChild); // Insert input before any other elements (like Start button)
+        taskCard.insertBefore(input, taskCard.firstChild); // Insert input at the beginning
         input.focus();
 
-        // Function to save the task when Enter is pressed or input loses focus
+        // Save the edited task when Enter is pressed or input loses focus
         const saveTask = () => {
             const newText = input.value.trim();
             input.remove(); // Remove the input field
 
+            // Add the new text, or restore the old text if input is empty
             if (newText !== '') {
-                taskCard.insertBefore(document.createTextNode(newText), taskCard.firstChild); // Add the new text back
+                taskCard.insertBefore(document.createTextNode(newText), taskCard.firstChild); 
             } else {
-                taskCard.insertBefore(document.createTextNode(currentText), taskCard.firstChild); // Restore the original text if input is empty
+                taskCard.insertBefore(document.createTextNode(currentText), taskCard.firstChild);
             }
 
             saveSessionData(); // Save the session data after editing
 
             // Re-add the Start button if the task is in the in-progress column
             if (taskCard.classList.contains('in-progress')) {
-                addStartButton(taskCard);
+                addStartButton(taskCard); // Make sure the Start button is still there
             }
         };
 
-        // Event listeners to save the task on blur or pressing Enter
+        // Event listeners for blur or pressing Enter to save the task
         input.addEventListener('blur', saveTask);
         input.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
@@ -183,20 +184,22 @@ function makeTaskEditable(taskCard) {
 
 // Function to add the Start button to in-progress tasks
 function addStartButton(taskCard) {
+    // Check if the task card already has a start button
     const existingButton = taskCard.querySelector('.start-button');
-    if (existingButton) {
-        existingButton.remove(); // Ensure no duplicate buttons
+    if (!existingButton) {
+        // Create the Start button
+        const startButton = document.createElement('button');
+        startButton.textContent = 'Start';
+        startButton.classList.add('start-button');
+
+        // Add the click event to handle the timer
+        startButton.addEventListener('click', () => {
+            startPomodoroTimer(taskCard);
+        });
+
+        // Append the button to the task card
+        taskCard.appendChild(startButton);
     }
-
-    const startButton = document.createElement('button');
-    startButton.textContent = 'Start';
-    startButton.classList.add('start-button');
-
-    startButton.addEventListener('click', () => {
-        startPomodoroTimer(taskCard);
-    });
-
-    taskCard.appendChild(startButton);
 }
 
 // Function to handle the Pomodoro timer

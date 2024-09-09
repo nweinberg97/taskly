@@ -130,13 +130,11 @@ function makeTaskEditable(taskCard) {
     taskCard.addEventListener('dblclick', (e) => {
         // Prevent the double click from affecting the start button
         if (e.target.classList.contains('start-button')) {
-            return; // Don't enter edit mode if we click the Start button
+            return;
         }
 
-        // Find the text node (skip buttons or other elements)
         const currentText = [...taskCard.childNodes].find(node => node.nodeType === Node.TEXT_NODE)?.textContent.trim() || '';
 
-        // Create the input element for editing
         const input = document.createElement('input');
         input.type = 'text';
         input.value = currentText;
@@ -157,9 +155,8 @@ function makeTaskEditable(taskCard) {
             const newText = input.value.trim();
             input.remove(); // Remove the input field
 
-            // Add the new text, or restore the old text if input is empty
             if (newText !== '') {
-                taskCard.insertBefore(document.createTextNode(newText), taskCard.firstChild); 
+                taskCard.insertBefore(document.createTextNode(newText), taskCard.firstChild);
             } else {
                 taskCard.insertBefore(document.createTextNode(currentText), taskCard.firstChild);
             }
@@ -184,20 +181,16 @@ function makeTaskEditable(taskCard) {
 
 // Function to add the Start button to in-progress tasks
 function addStartButton(taskCard) {
-    // Check if the task card already has a start button
     const existingButton = taskCard.querySelector('.start-button');
     if (!existingButton) {
-        // Create the Start button
         const startButton = document.createElement('button');
         startButton.textContent = 'Start';
         startButton.classList.add('start-button');
 
-        // Add the click event to handle the timer
         startButton.addEventListener('click', () => {
-            startPomodoroTimer(taskCard);
+            startPomodoroTimer(taskCard); // Trigger Pomodoro timer
         });
 
-        // Append the button to the task card
         taskCard.appendChild(startButton);
     }
 }
@@ -237,11 +230,7 @@ function startPomodoroTimer(taskCard) {
     timerOverlay.appendChild(timerDisplay);
     document.body.appendChild(timerOverlay);
 
-    // Add basic timer functionality
-    const startControl = document.getElementById('start-timer');
-    const pauseControl = document.getElementById('pause-timer');
-    const resetControl = document.getElementById('reset-timer');
-
+    // Timer functionality
     let countdown;
     let timeRemaining = 20 * 60; // 20 minutes in seconds
 
@@ -274,9 +263,9 @@ function startPomodoroTimer(taskCard) {
         updateDisplay();
     }
 
-    startControl.addEventListener('click', startTimer);
-    pauseControl.addEventListener('click', pauseTimer);
-    resetControl.addEventListener('click', () => {
+    document.getElementById('start-timer').addEventListener('click', startTimer);
+    document.getElementById('pause-timer').addEventListener('click', pauseTimer);
+    document.getElementById('reset-timer').addEventListener('click', () => {
         resetTimer();
         document.body.removeChild(timerOverlay);
     });
@@ -292,7 +281,7 @@ function startPomodoroTimer(taskCard) {
         });
     });
 
-    updateDisplay(); // Update display with the initial time
+    updateDisplay(); // Initial display
 }
 
 // Function to handle adding task when the enter key is pressed

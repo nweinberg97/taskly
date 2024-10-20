@@ -51,20 +51,6 @@ function enableDragAndDrop() {
             }
             column.parentElement.classList.remove('hovering'); // Remove hovering class on drop
 
-            // Handle in-progress and other columns
-            if (column.parentElement.id === 'in-progress') {
-                draggingTask.classList.add('in-progress');
-                if (!draggingTask.querySelector('.start-button')) {
-                    addStartButton(draggingTask); // Add the start button only if it doesn't exist
-                }
-            } else {
-                draggingTask.classList.remove('in-progress');
-                const startButton = draggingTask.querySelector('.start-button');
-                if (startButton) {
-                    startButton.remove(); // Remove the start button when moved out of the in-progress column
-                }
-            }
-
             saveSessionData(); // Save the session data after dropping
         });
     });
@@ -109,12 +95,6 @@ function addTaskToColumn(column) {
     // Make the new task editable
     makeTaskEditable(newTask);
 
-    // Add the Start button if in the in-progress column
-    if (column.id === 'in-progress') {
-        newTask.classList.add('in-progress'); // Add the in-progress class
-        addStartButton(newTask);
-    }
-
     // Clear the input field
     taskInput.value = '';
 
@@ -128,11 +108,6 @@ function addTaskToColumn(column) {
 // Function to make a task card editable
 function makeTaskEditable(taskCard) {
     taskCard.addEventListener('dblclick', (e) => {
-        // Prevent the double click from affecting the start button
-        if (e.target.classList.contains('start-button')) {
-            return;
-        }
-
         const currentText = [...taskCard.childNodes].find(node => node.nodeType === Node.TEXT_NODE)?.textContent.trim() || '';
 
         const input = document.createElement('input');
@@ -140,7 +115,7 @@ function makeTaskEditable(taskCard) {
         input.value = currentText;
         input.classList.add('task-edit-input');
 
-        // Remove only the text node, keep other elements intact (like the Start button)
+        // Remove only the text node, keep other elements intact
         [...taskCard.childNodes].forEach(node => {
             if (node.nodeType === Node.TEXT_NODE) {
                 taskCard.removeChild(node); // Remove text node only
@@ -162,11 +137,6 @@ function makeTaskEditable(taskCard) {
             }
 
             saveSessionData(); // Save the session data after editing
-
-            // Re-add the Start button if the task is in the in-progress column
-            if (taskCard.classList.contains('in-progress')) {
-                addStartButton(taskCard); // Make sure the Start button is still there
-            }
         };
 
         // Event listeners for blur or pressing Enter to save the task
@@ -177,111 +147,6 @@ function makeTaskEditable(taskCard) {
             }
         });
     });
-}
-
-// Function to add the Start button to in-progress tasks
-function addStartButton(taskCard) {
-    const existingButton = taskCard.querySelector('.start-button');
-    if (!existingButton) {
-        const startButton = document.createElement('button');
-        startButton.textContent = 'Start';
-        startButton.classList.add('start-button');
-
-        startButton.addEventListener('click', () => {
-            startPomodoroTimer(taskCard); // Trigger Pomodoro timer
-        });
-
-        taskCard.appendChild(startButton);
-    }
-}
-
-// Function to handle the Pomodoro timer
-function startPomodoroTimer(taskCard) {
-    console.log("Start button clicked");
-
-    // Check if there's already an overlay, remove it
-    let existingOverlay = document.getElementById('pomodoro-overlay');
-    if (existingOverlay) {
-        existingOverlay.remove();
-    }
-
-    // Create the Pomodoro timer overlay
-    const timerOverlay = document.createElement('div');
-    timerOverlay.id = 'pomodoro-overlay';
-
-    // Create the timer display
-    const timerDisplay = document.createElement('div');
-    timerDisplay.id = 'pomodoro-timer';
-    timerDisplay.innerHTML = `
-        <div id="time-display">20:00</div>
-        <div id="timer-controls">
-            <button id="start-timer">Start</button>
-            <button id="pause-timer">Pause</button>
-            <button id="reset-timer">Reset</button>
-        </div>
-        <div class="timer-modes">
-            <button data-time="15">15 min</button>
-            <button data-time="20" class="active">20 min</button>
-            <button data-time="25">25 min</button>
-            <button data-time="30">30 min</button>
-        </div>
-    `;
-
-    timerOverlay.appendChild(timerDisplay);
-    document.body.appendChild(timerOverlay);
-
-    // Timer functionality
-    let countdown;
-    let timeRemaining = 20 * 60; // 20 minutes in seconds
-
-    function updateDisplay() {
-        const minutes = Math.floor(timeRemaining / 60);
-        const seconds = timeRemaining % 60;
-        document.getElementById('time-display').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-    }
-
-    function startTimer() {
-        if (countdown) clearInterval(countdown);
-        countdown = setInterval(() => {
-            if (timeRemaining > 0) {
-                timeRemaining--;
-                updateDisplay();
-            } else {
-                clearInterval(countdown);
-                alert('Time is up!');
-            }
-        }, 1000);
-    }
-
-    function pauseTimer() {
-        if (countdown) clearInterval(countdown);
-    }
-
-    function resetTimer() {
-        pauseTimer();
-        timeRemaining = 20 * 60; // Reset to 20 minutes
-        updateDisplay();
-    }
-
-    document.getElementById('start-timer').addEventListener('click', startTimer);
-    document.getElementById('pause-timer').addEventListener('click', pauseTimer);
-    document.getElementById('reset-timer').addEventListener('click', () => {
-        resetTimer();
-        document.body.removeChild(timerOverlay);
-    });
-
-    // Update timeRemaining based on timer mode buttons
-    const modeButtons = document.querySelectorAll('.timer-modes button');
-    modeButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            timeRemaining = parseInt(button.getAttribute('data-time')) * 60;
-            updateDisplay();
-            modeButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-        });
-    });
-
-    updateDisplay(); // Initial display
 }
 
 // Function to handle adding task when the enter key is pressed
@@ -356,12 +221,6 @@ function loadSessionData() {
 
             // Make the loaded task editable
             makeTaskEditable(task);
-
-            // Add the Start button if in the in-progress column
-            if (columnId === 'in-progress') {
-                task.classList.add('in-progress'); // Add the in-progress class
-                addStartButton(task);
-            }
         });
     });
 
